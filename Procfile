@@ -1,1 +1,2 @@
-web: ./server/ktor/build/install/ktor/bin/ktor
+
+web: cd server && ./ktor/build/install/ktor/bin/ktor
