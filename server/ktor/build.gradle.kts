@@ -29,3 +29,7 @@ dependencies {
     implementation(libs.kotlin.test)
     implementation(project(":entity"))
 }
+
+tasks {
+    create("stage").dependsOn("installDist")
+}
