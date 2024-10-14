@@ -1,6 +1,7 @@
 package com.alot23.genshinabyssdraft.presentation
 
 import co.touchlab.kermit.Logger
+import com.alot23.genshinabyssdraft.Server
 import com.alot23.genshinabyssdraft.entity.CharacterConfiguration
 import com.alot23.genshinabyssdraft.entity.GameConfiguration
 import com.alot23.genshinabyssdraft.entity.Step
@@ -46,7 +47,7 @@ class HomeViewModel(
 ) : ViewModel(), KoinComponent {
 
     companion object {
-        const val HOST = "0.0.0.0"
+        const val HOST = Server.Link
     }
 
     private val PATH = "/echo/$gameToken/$playerToken"
@@ -79,7 +80,7 @@ class HomeViewModel(
     private fun init() {
         setupConfiguration()
         viewModelScope.launch {
-            client.webSocket(method = HttpMethod.Get, host = HOST, port = 8080, path = PATH) {
+            client.webSocket(method = HttpMethod.Get, host = HOST, path = PATH) {
 
                 val messageOutputRoutine = launch { outputMessages() }
                 val userInputRoutine = launch { inputMessages() }
@@ -95,9 +96,8 @@ class HomeViewModel(
         viewModelScope.launch {
             val response = client.get {
                 url {
-                    protocol = URLProtocol.HTTP
+                    protocol = URLProtocol.HTTPS
                     host = EntryViewModel.HOST
-                    port = EntryViewModel.PORT
                     path(CONFIGURATION_PATH)
                 }
                 accept(ContentType.Application.Json)

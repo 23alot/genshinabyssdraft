@@ -27,9 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.alot23.genshinabyssdraft.client.shared.generated.resources.Res
+import com.alot23.genshinabyssdraft.client.shared.generated.resources.*
 import com.alot23.genshinabyssdraft.entity.CharacterConfiguration
-import genshinabyssdraft.shared.generated.resources.Res
-import genshinabyssdraft.shared.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

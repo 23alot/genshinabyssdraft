@@ -1,6 +1,7 @@
 package com.alot23.genshinabyssdraft.presentation.entry
 
 import co.touchlab.kermit.Logger
+import com.alot23.genshinabyssdraft.Server
 import com.alot23.genshinabyssdraft.entity.CharacterConfiguration
 import com.alot23.genshinabyssdraft.entity.GameConfiguration
 import com.alot23.genshinabyssdraft.entity.LogInfo
@@ -34,8 +35,7 @@ import org.koin.core.component.KoinComponent
 class EntryViewModel() : ViewModel(), KoinComponent {
 
     companion object {
-        const val HOST = "0.0.0.0"
-        const val PORT = 8080
+        const val HOST = Server.Link
         const val CREATE_PATH = "/creategame"
         const val LOGIN_PATH = "/role"
     }
@@ -53,9 +53,8 @@ class EntryViewModel() : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val response = client.get {
                 url {
-                    protocol = URLProtocol.HTTP
+                    protocol = URLProtocol.HTTPS
                     host = HOST
-                    port = PORT
                     path("$LOGIN_PATH/$gameToken/$playerToken")
                 }
             }
@@ -98,9 +97,8 @@ class EntryViewModel() : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val response = client.post {
                 url {
-                    protocol = URLProtocol.HTTP
+                    protocol = URLProtocol.HTTPS
                     host = HOST
-                    port = PORT
                     path(CREATE_PATH)
                 }
                 contentType(ContentType.Application.Json)
