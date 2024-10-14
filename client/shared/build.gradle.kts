@@ -60,8 +60,8 @@ kotlin {
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.websockets)
                 implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.serialization.kotlinx.json)
-                api(projects.entity)
+                implementation(libs.ktor.client.serialization.kotlinx.json)
+                api(project(":entity"))
             }
         }
         androidMain.dependencies {

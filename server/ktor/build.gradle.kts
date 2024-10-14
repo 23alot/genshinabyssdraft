@@ -25,7 +25,7 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.serialization)
-    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.serialization.kotlinx.json)
     implementation(libs.kotlin.test)
     implementation(project(":entity"))
 }

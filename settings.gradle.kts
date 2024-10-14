@@ -1,5 +1,7 @@
 pluginManagement {
     repositories {
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
         google()
         gradlePluginPortal()
@@ -9,6 +11,8 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
         google()
         mavenCentral()
@@ -17,7 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "com.alot23.genshinabyssdraft"
 
-include(":ktor")
+include(":server:ktor")
 include(":entity")
-
-project(":entity").projectDir = File(settingsDir, "../entity")
+include(":client:shared")
+include(":client:androidApp")
