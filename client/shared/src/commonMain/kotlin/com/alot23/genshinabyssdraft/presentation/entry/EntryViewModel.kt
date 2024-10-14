@@ -35,7 +35,6 @@ import org.koin.core.component.KoinComponent
 class EntryViewModel() : ViewModel(), KoinComponent {
 
     companion object {
-        const val HOST = Server.Link
         const val CREATE_PATH = "/creategame"
         const val LOGIN_PATH = "/role"
     }
@@ -53,8 +52,9 @@ class EntryViewModel() : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val response = client.get {
                 url {
-                    protocol = URLProtocol.HTTPS
-                    host = HOST
+                    protocol = URLProtocol.HTTP
+                    host = Server.Link
+                    port = Server.Port
                     path("$LOGIN_PATH/$gameToken/$playerToken")
                 }
             }
@@ -97,8 +97,9 @@ class EntryViewModel() : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val response = client.post {
                 url {
-                    protocol = URLProtocol.HTTPS
-                    host = HOST
+                    protocol = URLProtocol.HTTP
+                    host = Server.Link
+                    port = Server.Port
                     path(CREATE_PATH)
                 }
                 contentType(ContentType.Application.Json)

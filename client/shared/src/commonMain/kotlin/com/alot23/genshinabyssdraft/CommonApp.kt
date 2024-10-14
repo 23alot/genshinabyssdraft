@@ -96,10 +96,22 @@ fun CommonApp() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         val scrollState = rememberScrollState()
-                        Row(modifier = Modifier.verticalScroll(scrollState)) {
-                            CharactersField(characters = state.firstCharacters, clickable = state.role is Role.First, onCharacterClick = { character -> homeViewModel.onCharacterClick(character) })
-                            Steps(steps = state.gameConfig, step = state.currentStep)
-                            CharactersField(characters = state.secondCharacters, clickable = state.role is Role.Second, onCharacterClick = { character -> homeViewModel.onCharacterClick(character) })
+                        if (state.gameConfig.isNotEmpty()) {
+                            Row(modifier = Modifier.verticalScroll(scrollState)) {
+                                CharactersField(
+                                    characters = state.firstCharacters,
+                                    clickable = state.isFirstSelectable(),
+                                    onCharacterClick = { character ->
+                                        homeViewModel.onCharacterClick(character)
+                                    })
+                                Steps(steps = state.gameConfig, step = state.currentStep)
+                                CharactersField(
+                                    characters = state.secondCharacters,
+                                    clickable = state.isSecondSelectable(),
+                                    onCharacterClick = { character ->
+                                        homeViewModel.onCharacterClick(character)
+                                    })
+                            }
                         }
 
                     }
@@ -125,6 +137,54 @@ fun CommonApp() {
             }
         }
     }
+}
+
+private fun GameState.isFirstSelectable(): Boolean = when (role) {
+    Role.First -> when (gameConfig[currentStep]) {
+        is Step.FirstImmune,
+        is Step.FirstPick -> true
+        is Step.Ready,
+        is Step.End,
+        is Step.FirstBan,
+        is Step.SecondBan,
+        is Step.SecondImmune,
+        is Step.SecondPick -> false
+    }
+    Role.Second -> when (gameConfig[currentStep]) {
+        is Step.Ready,
+        is Step.End,
+        is Step.FirstBan,
+        is Step.FirstImmune,
+        is Step.FirstPick,
+        is Step.SecondImmune,
+        is Step.SecondPick -> false
+        is Step.SecondBan -> true
+    }
+    Role.Observer -> false
+}
+
+private fun GameState.isSecondSelectable(): Boolean = when (role) {
+    Role.First -> when (gameConfig[currentStep]) {
+        is Step.Ready,
+        is Step.End,
+        is Step.FirstImmune,
+        is Step.SecondBan,
+        is Step.FirstPick,
+        is Step.SecondImmune,
+        is Step.SecondPick -> false
+        is Step.FirstBan -> true
+    }
+    Role.Second -> when (gameConfig[currentStep]) {
+        is Step.Ready,
+        is Step.End,
+        is Step.FirstBan,
+        is Step.SecondBan,
+        is Step.FirstImmune,
+        is Step.FirstPick -> false
+        is Step.SecondImmune,
+        is Step.SecondPick -> true
+    }
+    Role.Observer -> false
 }
 
 private fun GameState.isConfirmButtonVisible(): Boolean = when (role) {

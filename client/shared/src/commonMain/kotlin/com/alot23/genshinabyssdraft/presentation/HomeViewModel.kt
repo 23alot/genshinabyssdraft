@@ -8,7 +8,6 @@ import com.alot23.genshinabyssdraft.entity.Step
 import com.alot23.genshinabyssdraft.entity.GameStep
 import com.alot23.genshinabyssdraft.entity.Role
 import com.alot23.genshinabyssdraft.entity.toStep
-import com.alot23.genshinabyssdraft.presentation.entry.EntryViewModel
 import com.alot23.genshinabyssdraft.ui.CharacterInfo
 import com.alot23.genshinabyssdraft.ui.CharacterSelectionInfo
 import com.alot23.genshinabyssdraft.ui.TimerState
@@ -46,10 +45,6 @@ class HomeViewModel(
     private val role: Role
 ) : ViewModel(), KoinComponent {
 
-    companion object {
-        const val HOST = Server.Link
-    }
-
     private val PATH = "/echo/$gameToken/$playerToken"
     private val CONFIGURATION_PATH = "/configuration/$gameToken/$playerToken"
     private val gameMove: MutableStateFlow<GameStep?> = MutableStateFlow(null)
@@ -80,7 +75,7 @@ class HomeViewModel(
     private fun init() {
         setupConfiguration()
         viewModelScope.launch {
-            client.webSocket(method = HttpMethod.Get, host = HOST, path = PATH) {
+            client.webSocket(method = HttpMethod.Get, host = Server.Link, port = Server.Port, path = PATH) {
 
                 val messageOutputRoutine = launch { outputMessages() }
                 val userInputRoutine = launch { inputMessages() }
@@ -96,8 +91,9 @@ class HomeViewModel(
         viewModelScope.launch {
             val response = client.get {
                 url {
-                    protocol = URLProtocol.HTTPS
-                    host = EntryViewModel.HOST
+                    protocol = URLProtocol.HTTP
+                    host = Server.Link
+                    port = Server.Port
                     path(CONFIGURATION_PATH)
                 }
                 accept(ContentType.Application.Json)
@@ -167,7 +163,8 @@ class HomeViewModel(
     }
 
     private fun onGameStep(gameStep: GameStep) = state.update { previousState ->
-        previousState.currentTimer?.stop()
+        firstTimer.stop()
+        secondTimer.stop()
         val stepState = previousState.gameConfig[gameStep.step]
         val nextState = previousState.gameConfig[gameStep.step + 1]
         val firstCharacter = previousState.firstCharacters.find { info -> info.character.name == gameStep.data }
