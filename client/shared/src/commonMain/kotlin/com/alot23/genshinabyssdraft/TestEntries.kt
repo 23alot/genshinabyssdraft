@@ -5,7 +5,7 @@ import com.alot23.genshinabyssdraft.ui.CharacterInfo
 import com.alot23.genshinabyssdraft.ui.CharacterSelectionInfo
 import com.alot23.genshinabyssdraft.ui.GameCharacter
 
-val gameConfig = listOf(
+val gameConfig = listOf<Step>(
     Step.Ready,
     Step.FirstBan,
     Step.SecondBan,

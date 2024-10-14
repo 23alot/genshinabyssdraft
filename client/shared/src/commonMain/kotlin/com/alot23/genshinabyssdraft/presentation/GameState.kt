@@ -7,19 +7,27 @@ import com.alot23.genshinabyssdraft.ui.CharacterSelectionInfo
 import com.alot23.genshinabyssdraft.ui.TimerState
 
 data class GameState(
-    val role: Role = Role.Observer,
     val selectedCharacter: CharacterInfo? = null,
     val currentStep: Int = 0,
-    val gameConfig: List<Step> = emptyList(),
-    val firstBans: List<CharacterSelectionInfo> = emptyList(),
-    val firstPicks: List<CharacterSelectionInfo> = emptyList(),
+    val firstSelection: List<CharacterSelectionInfo> = emptyList(),
+    val secondSelection: List<CharacterSelectionInfo> = emptyList(),
     val firstCharacters: List<CharacterInfo> = emptyList(),
-    val secondBans: List<CharacterSelectionInfo> = emptyList(),
-    val secondPicks: List<CharacterSelectionInfo> = emptyList(),
     val secondCharacters: List<CharacterInfo> = emptyList(),
-    val immuneCharacters: List<String> = emptyList(),
-    val currentTimer: TimerState?,
-    val firstTimer: TimerState,
-    val secondTimer: TimerState,
+    val timer: Timer,
+    val draftSetup: DraftSetup = DraftSetup(),
     val showReady: Boolean = true
+)
+
+data class DraftSetup(
+    val role: Role = Role.Observer,
+    val gameConfig: List<Step> = emptyList(),
+    val firstCharacters: List<CharacterInfo> = emptyList(),
+    val secondCharacters: List<CharacterInfo> = emptyList(),
+    val immuneCharacters: List<String> = emptyList()
+)
+
+data class Timer(
+    val state: TimerState,
+    val firstLeft: Long,
+    val secondLeft: Long
 )

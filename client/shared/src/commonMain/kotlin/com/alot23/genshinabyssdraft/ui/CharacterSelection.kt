@@ -23,14 +23,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alot23.genshinabyssdraft.entity.Action
+import com.alot23.genshinabyssdraft.entity.Step
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun CharacterSelection(characterSelectionInfo: CharacterSelectionInfo) {
     val modifier = Modifier.height(height = 80.dp).width(80.dp)
+    val borderWidth = 2.dp
     return Box(
-        modifier = modifier,
+        modifier = modifier.border(borderWidth, characterSelectionInfo.borderColor(), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         characterSelectionInfo.characterInfo?.let { info ->
@@ -47,9 +50,8 @@ fun CharacterSelection(characterSelectionInfo: CharacterSelectionInfo) {
                     Alignment.CenterVertically), textAlign = TextAlign.Start)
             }
         } ?: run {
-            val backgroundColor = Color.DarkGray
-            val borderColor = if (characterSelectionInfo.isActive) Color.Yellow else Color.Gray
-            val borderWidth = 2.dp
+            val backgroundColor = characterSelectionInfo.backgroundColor()
+            val borderColor = characterSelectionInfo.borderColor()
             val textModifier = Modifier.height(height = 72.dp).width(72.dp).clip(shape = CircleShape).background(color = backgroundColor).border(borderWidth, borderColor, CircleShape).wrapContentHeight(align = Alignment.CenterVertically)
             Text(text = characterSelectionInfo.index.toString(), modifier = textModifier, textAlign = TextAlign.Center, fontSize = 24.sp)
         }
@@ -57,8 +59,22 @@ fun CharacterSelection(characterSelectionInfo: CharacterSelectionInfo) {
     }
 }
 
+private fun CharacterSelectionInfo.backgroundColor(): Color = when (this.step.action) {
+    Action.Ban -> Color.Red
+    Action.Immune,
+    Action.Pick -> Color.Green
+    Action.Ready,
+    Action.End -> throw IllegalArgumentException("${step.action} should not be used here")
+}
+
+private fun CharacterSelectionInfo.borderColor(): Color = when {
+    this.isActive -> Color.Yellow
+    else -> this.backgroundColor()
+}
+
 data class CharacterSelectionInfo(
     val index: Int,
     val characterInfo: CharacterInfo? = null,
+    val step: Step,
     val isActive: Boolean = false
 )

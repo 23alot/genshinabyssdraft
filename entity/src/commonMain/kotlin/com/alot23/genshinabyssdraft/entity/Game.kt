@@ -6,58 +6,37 @@ class Game {
 }
 
 @Serializable
-sealed interface Step {
+data class Step(
+    val role: Role,
+    val action: Action
+)
+
+@Serializable
+sealed interface Action {
 
     @Serializable
-    data object Ready : Step {
+    data object Ready : Action {
         override fun toString(): String = "Ready"
     }
 
     @Serializable
-    data object FirstPick : Step {
-        override fun toString(): String = "FirstPick"
+    data object Ban : Action {
+        override fun toString(): String = "Ban"
     }
 
     @Serializable
-    data object SecondPick : Step {
-        override fun toString(): String = "SecondPick"
+    data object Pick : Action {
+        override fun toString(): String = "Pick"
     }
 
     @Serializable
-    data object FirstBan : Step {
-        override fun toString(): String = "FirstBan"
+    data object Immune : Action {
+        override fun toString(): String = "Immune"
     }
 
     @Serializable
-    data object SecondBan : Step {
-        override fun toString(): String = "SecondBan"
-    }
-
-    @Serializable
-    data object FirstImmune : Step {
-        override fun toString(): String = "FirstImmune"
-    }
-
-    @Serializable
-    data object SecondImmune : Step {
-        override fun toString(): String = "SecondImmune"
-    }
-
-    @Serializable
-    data object End : Step {
+    data object End : Action {
         override fun toString(): String = "End"
     }
 
-}
-
-fun String.toStep(): Step = when (this) {
-    Step.Ready.toString() -> Step.Ready
-    Step.FirstPick.toString() -> Step.FirstPick
-    Step.FirstBan.toString() -> Step.FirstBan
-    Step.SecondPick.toString() -> Step.SecondPick
-    Step.SecondBan.toString() -> Step.SecondBan
-    Step.FirstImmune.toString() -> Step.FirstImmune
-    Step.SecondImmune.toString() -> Step.SecondImmune
-    Step.End.toString() -> Step.End
-    else -> throw IllegalArgumentException("Unknown action")
 }
